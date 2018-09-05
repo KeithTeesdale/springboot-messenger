@@ -49,8 +49,8 @@ public class Controller {
     	try {
     		UserDao dao = new UserDao(this.jdbcTemplate);
             return ResponseEntity.accepted().body(dao.userCreate(userRequest));    		
-    	}catch(Exception e) {
-    		e.printStackTrace();
+    	}catch(Exception e) {//Exception handling should be more granular. For example, SQLException, 
+    		e.printStackTrace();//Needs a logging implementation like log4j2 - *NOT* how I'd do this in PROD! :)
     		CreateUserResponse error = new CreateUserResponse();
     		error.setId(-1);
     		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
@@ -63,8 +63,8 @@ public class Controller {
     		UserTokenDao utDao = new UserTokenDao(this.jdbcTemplate);
     		LoginUserResponse response = utDao.createUserToken(userRequest);
     		return ResponseEntity.accepted().body(response);   		
-    	}catch(Exception e) {
-    		e.printStackTrace();
+    	}catch(Exception e) {//Exception handling should be more granular.
+    		e.printStackTrace();//log4j2
     		LoginUserResponse error = new LoginUserResponse();
     		error.setId(-1);
     		error.setToken("invalid");
@@ -81,8 +81,8 @@ public class Controller {
     		MessageDao mdao = new MessageDao(this.jdbcTemplate);
     		SendMessageResponse response = mdao.saveMessage(messageRequest);
     		return ResponseEntity.accepted().body(response);  
-    	}catch(Exception e){
-    		e.printStackTrace();
+    	}catch(Exception e){//Exception handling should be more granular.
+    		e.printStackTrace();//log4j2
     		SendMessageResponse error = new SendMessageResponse();
     		error.setId(-1);
     		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
@@ -103,8 +103,8 @@ public class Controller {
     		MessageDao mdao = new MessageDao(this.jdbcTemplate);
     		GetMessageResponse response = mdao.getMessage(recipientId, msgStartId, msgLimit);
     		return ResponseEntity.accepted().body(response); 
-    	}catch(Exception e){
-    		e.printStackTrace();
+    	}catch(Exception e){//Exception handling should be more granular.
+    		e.printStackTrace();//log4j2
     		GetMessageResponse error = new GetMessageResponse();
     		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     	}

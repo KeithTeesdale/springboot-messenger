@@ -5,6 +5,8 @@ public enum Type {
 	image,
 	video;
 	
+	public static String CONVERSION_ERROR = "Invalid Type";
+	
 	public static Type getType(String type) throws Exception{
 		switch (type){
 			case "text":
@@ -14,7 +16,7 @@ public enum Type {
 			case "video":
 				return video;
 			default:
-				throw new Exception("Invalid Type");
+				throw new Exception(CONVERSION_ERROR);
 		}
 	}
 }

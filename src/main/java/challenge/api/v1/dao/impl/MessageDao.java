@@ -54,8 +54,8 @@ public class MessageDao extends BaseDao {
     		    },
     		    keyHolder);
     	
-		//Not familiar with SQLLite but a procedure would have been useful here. 
-    	//Output parameters could avoid a second DB call
+		//A procedure would have been useful here. 
+    	//Output parameters could avoid a second DB call and improve performance
     	return getMessageById(keyHolder.getKey().longValue());
 	}
 	
