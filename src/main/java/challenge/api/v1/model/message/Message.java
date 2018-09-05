@@ -1,7 +1,6 @@
 package challenge.api.v1.model.message;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 import javax.validation.constraints.Min;
@@ -12,21 +11,61 @@ public class Message implements Serializable{
 
 	@NotNull
 	@Min(0)
-	private BigInteger id;
+	private long id;
 	
 	@NotNull
 	private LocalDateTime timestamp;
 	
 	@NotNull
 	@Min(0)
-	private String sender;
+	private long sender;
 	
 	@NotNull
 	@Min(0)
-	private String recipient;
+	private long recipient;
 	
 	@NotNull
 	private Content content;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(LocalDateTime timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public long getSender() {
+		return sender;
+	}
+
+	public void setSender(long sender) {
+		this.sender = sender;
+	}
+
+	public long getRecipient() {
+		return recipient;
+	}
+
+	public void setRecipient(long recipient) {
+		this.recipient = recipient;
+	}
+
+	public Content getContent() {
+		return content;
+	}
+
+	public void setContent(Content content) {
+		this.content = content;
+	}
 
 	@Override
 	public String toString() {

@@ -26,8 +26,4 @@ public class UserTokenDao extends BaseDao {
 		
 		return response;
 	}
-	
-	public boolean isValidToken() {
-		return false;
-	}
 }

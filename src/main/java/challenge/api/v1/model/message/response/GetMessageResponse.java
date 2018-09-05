@@ -11,7 +11,7 @@ public class GetMessageResponse implements Serializable {
 
 	private static final long serialVersionUID = 5681587567435026519L;
 	
-	@javax.validation.constraints.PositiveOrZero.List(value = { @PositiveOrZero })
+	@PositiveOrZero.List(value = { @PositiveOrZero })
 	List<Message> messages;
 
 	public List<Message> getMessages() {

@@ -1,0 +1,1 @@
+select (expiration > datetime('now')) as isValidToken from Token where uid=? and token=?;

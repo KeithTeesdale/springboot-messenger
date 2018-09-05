@@ -8,11 +8,12 @@ import java.util.UUID;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class TokenDao extends BaseDao {
+	private final String CREATE_TOKEN_SQL = "INSERT into Token (uid, token) values (?, ?);";
+	private final String IS_VALID_TOKEN_SQL = "select (expiration > datetime('now')) as isValidToken from Token where token=?;";
+	
 	public TokenDao(JdbcTemplate jdbcTemplate) {
 		super(jdbcTemplate);
 	}
-
-	private final String CREATE_TOKEN_SQL = "INSERT into Token (uid, token) values (?, ?);";
 	
 	public String createToken (Long userId) {
 		byte[] tokenBytes = userId.toString().concat(";").concat(UUID.randomUUID().toString()).getBytes();
@@ -23,5 +24,14 @@ public class TokenDao extends BaseDao {
 		String insertedToken = createToken(userId);
 		jdbcTemplate.update(CREATE_TOKEN_SQL, new Object[] {userId, insertedToken});
 		return insertedToken;
+	}
+	
+	public boolean isValidToken(String token) {
+		Boolean isValidToken = jdbcTemplate.queryForObject(IS_VALID_TOKEN_SQL, new Object[]{token}, Boolean.class);
+		
+		if(isValidToken != null && isValidToken.booleanValue())
+			return isValidToken;
+		
+		return false;
 	}
 }

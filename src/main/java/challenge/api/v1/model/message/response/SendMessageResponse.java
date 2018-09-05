@@ -1,27 +1,26 @@
 package challenge.api.v1.model.message.response;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Positive;
 
 public class SendMessageResponse implements Serializable {
 
 	private static final long serialVersionUID = -2332611040793714500L;
 	
-	@PositiveOrZero
-	private BigInteger id;
+	@Positive
+	private long id;
 	
 	@NotNull
 	private LocalDateTime timestamp;
 
-	public BigInteger getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(BigInteger id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

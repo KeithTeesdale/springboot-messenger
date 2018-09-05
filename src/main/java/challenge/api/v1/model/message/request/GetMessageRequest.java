@@ -1,20 +1,22 @@
 package challenge.api.v1.model.message.request;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Positive;
 
 public class GetMessageRequest implements Serializable {
 
 	private static final long serialVersionUID = 4899467439960469739L;
 	
-	@PositiveOrZero
-	private BigInteger recipient;
+	@Positive
+	private long recipient;
 	
-	@PositiveOrZero
+	@Positive
 	private int start;
 	
-	@PositiveOrZero
+	@Null
+	@Min(1)
 	private int limit;
 }

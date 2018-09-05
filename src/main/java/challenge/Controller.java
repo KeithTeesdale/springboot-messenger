@@ -11,11 +11,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import challenge.api.v1.dao.impl.MessageDao;
+import challenge.api.v1.dao.impl.TokenDao;
 import challenge.api.v1.dao.impl.UserDao;
 import challenge.api.v1.dao.impl.UserTokenDao;
 import challenge.api.v1.model.message.request.SendMessageRequest;
+import challenge.api.v1.model.message.response.GetMessageResponse;
 import challenge.api.v1.model.message.response.SendMessageResponse;
 import challenge.api.v1.model.user.request.UserRequest;
 import challenge.api.v1.model.user.response.CreateUserResponse;
@@ -46,6 +50,7 @@ public class Controller {
     		UserDao dao = new UserDao(this.jdbcTemplate);
             return ResponseEntity.accepted().body(dao.userCreate(userRequest));    		
     	}catch(Exception e) {
+    		e.printStackTrace();
     		CreateUserResponse error = new CreateUserResponse();
     		error.setId(-1);
     		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
@@ -59,7 +64,7 @@ public class Controller {
     		LoginUserResponse response = utDao.createUserToken(userRequest);
     		return ResponseEntity.accepted().body(response);   		
     	}catch(Exception e) {
-    		System.err.println(e.getMessage());
+    		e.printStackTrace();
     		LoginUserResponse error = new LoginUserResponse();
     		error.setId(-1);
     		error.setToken("invalid");
@@ -69,10 +74,44 @@ public class Controller {
     
     @RequestMapping(value = "/messages", method = { RequestMethod.POST })
     public ResponseEntity<SendMessageResponse> sendMessage(@RequestHeader(value="Authorization") String token, @RequestBody SendMessageRequest messageRequest) {
-		return null;
+    	try{ 
+    		if(!isValidToken(token))
+    			throw new IllegalArgumentException("No Valid Token Found for: "+messageRequest.getSender());
+    		
+    		MessageDao mdao = new MessageDao(this.jdbcTemplate);
+    		SendMessageResponse response = mdao.saveMessage(messageRequest);
+    		return ResponseEntity.accepted().body(response);  
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		SendMessageResponse error = new SendMessageResponse();
+    		error.setId(-1);
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    	}
     }
     
-    private boolean isValidToken(Long userId, String token) {
-		return false;
+    @RequestMapping(value = "/messages", method = { RequestMethod.GET })
+    public ResponseEntity<GetMessageResponse> getMessage(
+    		@RequestHeader(value="Authorization") String token, 
+    		@RequestParam("recipient") long recipientId, 
+    		@RequestParam("start") int msgStartId,
+    		@RequestParam(value = "limit", required = false) Integer msgLimit){
+    	
+    	try{
+    		if(!isValidToken(token))
+    			throw new IllegalArgumentException("No Valid Token Found");
+    		
+    		MessageDao mdao = new MessageDao(this.jdbcTemplate);
+    		GetMessageResponse response = mdao.getMessage(recipientId, msgStartId, msgLimit);
+    		return ResponseEntity.accepted().body(response); 
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		GetMessageResponse error = new GetMessageResponse();
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    	}
     }
+    
+    private boolean isValidToken(String token){
+    	return (new TokenDao(this.jdbcTemplate)).isValidToken(token);
+    }
+    
 }

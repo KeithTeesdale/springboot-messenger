@@ -1,0 +1,1 @@
+INSERT into Users (name, pass) values (?, ?);

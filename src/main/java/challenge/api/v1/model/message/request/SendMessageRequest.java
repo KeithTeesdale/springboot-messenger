@@ -1,7 +1,6 @@
 package challenge.api.v1.model.message.request;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -13,27 +12,27 @@ public class SendMessageRequest implements Serializable {
 	private static final long serialVersionUID = -1337541403001985817L;
 	
 	@Positive
-	private BigInteger sender;
+	private long sender;
 	
 	@Positive
-	private BigInteger recipient;
+	private long recipient;
 	
 	@NotNull
 	private Content content;
 
-	public BigInteger getSender() {
+	public long getSender() {
 		return sender;
 	}
 
-	public void setSender(BigInteger sender) {
+	public void setSender(long sender) {
 		this.sender = sender;
 	}
 
-	public BigInteger getRecipient() {
+	public long getRecipient() {
 		return recipient;
 	}
 
-	public void setRecipient(BigInteger recipient) {
+	public void setRecipient(long recipient) {
 		this.recipient = recipient;
 	}
 
